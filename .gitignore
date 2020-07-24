@@ -3,5 +3,5 @@ terraform.tfstate
 terraform.tfstate.backup
 *.yaml
 .DS_Store
-config
+#config
 !jenkins.yaml

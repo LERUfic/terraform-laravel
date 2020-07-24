@@ -4,6 +4,39 @@ kind: Namespace
 metadata:
   name: jenkins
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: var-volume
+  namespace: jenkins
+  labels:
+    type: local
+    app: jenkins
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/jenkins"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: var-claim
+  namespace: jenkins
+  labels:
+    app: jenkins
+spec:
+  volumeName: var-volume
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,18 +54,18 @@ spec:
     spec:
       containers:
       - name: jenkins
-        image: jenkins/jenkins:lts
+        image: partlab/ubuntu-jenkins:latest
         ports:
         - containerPort: 8080
           name: portjenkins
           protocol: TCP
         volumeMounts:
-        - name: jenkins-home
-          mountPath: /var/jenkins_home
+        - mountPath: /var/jenkins
+          name: jenkins-pv1
       volumes:
-      - name: jenkins-home
-        emptyDir: {}
-      restartPolicy: Always
+      - name: jenkins-pv1
+        persistentVolumeClaim:
+          claimName: var-claim
 ---
 apiVersion: v1
 kind: Service
