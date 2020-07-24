@@ -23,7 +23,7 @@ resource "kubernetes_deployment" "php" {
       spec {
         container {
           name  = "php"
-          image = "lerufic/laravel:development"
+          image = "lerufic/laravel:latest"
 
           port {
             name           = "port1"
