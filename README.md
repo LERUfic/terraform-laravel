@@ -4,6 +4,9 @@ terraform + kubernetes for laravel, nginx, mysql
 ## How to Use
 1. Setup kubernetes cluster  
 You can use minikube, k3s, k3d, or anything that you want.
+```
+k3d cluster create percobaandua --api-port 10.199.16.55:8443 -p 8000:30080@agent[0] -p 8043:30443@agent[0] --agents 1
+```
 2. Intall terraform  
 Check [this link](https://learn.hashicorp.com/terraform/getting-started/install.html) to learn how to install terraform.
 3. Clone this repository and go inside the clonned folder  
